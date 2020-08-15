@@ -5,7 +5,7 @@
 
 name: tianzpxyz-OpenWrt-Lean-ipv6
 
-#on:
+on:
   push:
     branches: 
       - master
@@ -45,7 +45,7 @@ jobs:
           cd package
           mkdir openwrt-packages
           cd openwrt-packages
-          git clone https://github.com/openwrt-develop/luci-theme-atmaterial.git
+          git clone https://github.com/siropboy/mypackages package/mypackages
            
      - name: 每天定时同步Lean的源码
         run: |
