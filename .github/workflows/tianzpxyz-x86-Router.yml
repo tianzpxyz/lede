@@ -52,19 +52,19 @@ jobs:
      #     git remote add openwrt https://github.com/coolsnowwolf/lede.git
      #     git pull openwrt master
      #     git remote -v
-     - name: Prepare openwrt
+     - name: Prepare lede
        run: |
-        sudo chown -R runner:runner /home/runner/work/openwrt
+        sudo chown -R runner:runner /home/lede
         cp -r ./scripts/ready_download.sh  ./ &&  /bin/bash ready_download.sh 
      - name: Prepare Package
        run: |
-        cd openwrt
+        cd lede
         cp -r ../scripts/update_package.sh ./ && /bin/bash update_package.sh
         chmod -R 755 ./
         df -h
      - name: Generate configuration file
        run: |
-        cd openwrt
+        cd lede
         # 修改LAN的IP地址
         # sed -i 's/192.168.1.1/192.168.9.1/g' ./package/base-files/files/bin/config_generate
         rm -f ./.config*
@@ -361,13 +361,13 @@ jobs:
      - name: Make Download
        run: |
         df -h
-        cd openwrt
+        cd lede
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
      - name: Compile Openwrt
        run: |
-          cd openwrt
+          cd lede
           echo -e "$(nproc) thread build."
           make -j$(nproc) || make -j1 V=s
           df -h
@@ -375,8 +375,8 @@ jobs:
        run: |
         rm -rf ./Firmware/
         mkdir -p ./Firmware/
-        find openwrt/bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ./Firmware/
-        find openwrt/bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./Firmware/
+        find lede/bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ./Firmware/
+        find lede/bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./Firmware/
         cd ./Firmware
         gzip *.img
      - name: Upload Firmware
