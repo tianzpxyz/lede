@@ -3,7 +3,7 @@
 # Author: tianzpxyz
 # https://github.com/tianzpxyz/Openwrt
 
-name: tianzpxyz-OpenWrt-Lean-ipv6
+name: tianzpxyz-OpenWrtx86-Lean
 
 on:
   push:
@@ -40,12 +40,12 @@ jobs:
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
          
-     - name: 增加功能源码
-        run: |
-          cd package
-          mkdir openwrt-packages
-          cd openwrt-packages
-          git clone https://github.com/siropboy/mypackages package/mypackages
+     #- name: 增加功能源码
+     #  run: |
+     #     cd package
+     #     mkdir openwrt-packages
+     #     cd openwrt-packages
+     #     git clone https://github.com/siropboy/mypackages package/mypackages
            
      - name: 每天定时同步Lean的源码
         run: |
@@ -64,7 +64,7 @@ jobs:
         df -h
      - name: Generate configuration file
        run: |
-        cd openwrt
+        cd lede
         # 修改LAN的IP地址
         # sed -i 's/192.168.1.1/192.168.9.1/g' ./package/base-files/files/bin/config_generate
         rm -f ./.config*
@@ -180,6 +180,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-vssr=m
         CONFIG_PACKAGE_luci-app-webadmin=y
         CONFIG_PACKAGE_luci-app-wrtbwmon=y
+        CONFIG_PACKAGE_luci-app-vnstat=y
         # CONFIG_PACKAGE_luci-app-xlnetacc is not set
         # CONFIG_PACKAGE_luci-app-zerotier is not set
         EOF
@@ -360,13 +361,13 @@ jobs:
      - name: Make Download
        run: |
         df -h
-        cd openwrt
+        cd lede
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
      - name: Compile Openwrt
        run: |
-          cd openwrt
+          cd lede
           echo -e "$(nproc) thread build."
           make -j$(nproc) || make -j1 V=s
           df -h
@@ -381,7 +382,7 @@ jobs:
      - name: Upload Firmware
        uses: actions/upload-artifact@main
        with:
-          name: tianzpxyzOpenWrt-IPV6-mini-Firmware
+          name: tianzpxyzOpenWrtx86-lede-IPV6
           path: ./Firmware/
      - name: Upload  IPK
        uses: actions/upload-artifact@main
