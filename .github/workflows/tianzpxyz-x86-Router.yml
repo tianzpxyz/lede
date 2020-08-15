@@ -5,10 +5,10 @@
 
 name: tianzpxyz-OpenWrtx86-Lean
 
-on:
-  push:
-    branches: 
-      - master
+#on:
+#  push:
+#    branches: 
+#      - master
 #on:
 #  schedule:
 #    - cron: 0 21 * * *
@@ -58,9 +58,7 @@ jobs:
         run: |
           rm -f ./.config*
           touch ./.config
-          
-        
-        #
+       #
         # ========================固件定制部分=======================
         # 
         # 
@@ -171,7 +169,6 @@ jobs:
         CONFIG_PACKAGE_luci-app-vssr=m
         CONFIG_PACKAGE_luci-app-webadmin=y
         CONFIG_PACKAGE_luci-app-wrtbwmon=y
-        CONFIG_PACKAGE_luci-app-vnstat=y
         # CONFIG_PACKAGE_luci-app-xlnetacc is not set
         # CONFIG_PACKAGE_luci-app-zerotier is not set
         EOF
