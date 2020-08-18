@@ -392,11 +392,27 @@ jobs:
           du -h --max-depth=1 ./ --exclude=build_dir --exclude=bin
           du -h --max-depth=1 ./build_dir
           du -h --max-depth=1 ./bin
-      - name: Prepare artifact
-        run: find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+     # - name: Prepare artifact
+     #   run: find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+
+
+      - name: Prepare Artifact
+        run: |
+         rm -rf ./Firmware/
+         mkdir -p ./Firmware/
+         find ./bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ./Firmware/
+         find ./bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./Firmware/
+         cd ./Firmware
+         gzip *.img
 
       - name: Upload artifact
         uses: actions/upload-artifact@master
         with:
           name: tianzpxyz_lede_OpenWrt_x64
-          path: ./bin/targets/
+          path: ./Firmware/
+
+      - name: Upload  IPK
+        uses: actions/upload-artifact@main
+        with:
+          name: tianzpxyz_lede_OpenWrt-Ipk
+          path: ./bin/packages/
